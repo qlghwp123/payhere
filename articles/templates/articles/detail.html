@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<p><span class="fw-bold">가격</span> : {{ article.price }}</p>
+<p><span class="fw-bold">메모</span> : {{ article.memo }}</p>
+<p><span class="fw-bold">생성일</span> : {{ article.created_at }}</p>
+<p><span class="fw-bold">수정일</span> : {{ article.updated_at }}</p>
+
+<a href="{% url 'articles:duplicate' article.pk %}" class="btn btn-primary">복사</a>
+<a href="{% url 'articles:update' article.pk %}" class="btn btn-success">수정</a>
+<a href="{% url 'articles:delete' article.pk %}" class="btn btn-danger">삭제</a>
+<a type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    URL 생성
+</a>
+  
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                아직 없어유
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" id="makeShortURL">생성</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const body = document.querySelector('.modal-body');
+    const btn = document.querySelector('#makeShortURL');
+    const url = '{% url "shorteners:shortener" %}';
+
+    btn.addEventListener('click', () => {
+        axios.get(url)
+        .then(res => {;
+            body.textContent = res.data['link']
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    });
+</script>
+
+{% endblock content %}
